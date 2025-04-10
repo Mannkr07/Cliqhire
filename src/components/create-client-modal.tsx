@@ -100,6 +100,7 @@ export function CreateClientModal({ open, onOpenChange }: CreateClientModalProps
       if (formData.location.length < 3) {
         setLocationSuggestions([])
         return
+        
       }
 
       try {
