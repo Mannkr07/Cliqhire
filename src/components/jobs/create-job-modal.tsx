@@ -3,6 +3,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useState, useEffect } from "react"
@@ -17,7 +18,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import { JobStage } from "@/types/job"
 import { Badge } from "@/components/ui/badge"
-import { X } from "lucide-react"
+import { X, FileText, Upload } from "lucide-react"
 
 interface CreateJobModalProps {
   open: boolean
@@ -112,6 +113,9 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
     keySkills: "",
     jobDescription: ""
   })
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -240,6 +244,22 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
     }
   }
 
+  function handleRemoveFile(): void {
+    setSelectedFile(null);
+    setFormData(prev => ({ ...prev, jobDescription: "" }));
+  }
+  function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>): void {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const text = reader.result as string;
+        setFormData(prev => ({ ...prev, jobDescription: text }));
+      };
+      reader.readAsText(file);
+    }
+  }
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
@@ -248,6 +268,7 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
+          </div>
             <div className="grid gap-2">
               <Label htmlFor="jobTitle">Job Title</Label>
               <Input
@@ -256,7 +277,6 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
                 value={formData.jobTitle}
                 onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
               />
-            </div>
 
             <div className="grid gap-2">
               <Label htmlFor="client">Client</Label>
@@ -564,10 +584,53 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
 
             <div className="grid gap-2">
               <Label>Job Description</Label>
-              <div className="border rounded-lg">
-                <EditorContent editor={editor} className="min-h-[200px] p-4" />
-              </div>
+              <div className="flex flex-col gap-4">
+                <div className="border-2 border-dashed rounded-lg p-6 text-center">
+                  <input
+                  type="file"
+                  ref={fileInputRef as React.RefObject<HTMLInputElement>}
+                  onChange={handleFileUpload as React.ChangeEventHandler<HTMLInputElement>}
+                  accept=".pdf"
+                  className="hidden"
+                  />
+                  <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  >
+                  <Upload className="h-4 w-4 mr-2" />
+                  Upload PDF
+                  </Button>
+                  <p className="text-sm text-muted-foreground mt-2">
+                  Or write the description below
+                  </p>
+                {selectedFile && (
+                  <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-blue-500" />
+                    <span>{selectedFile.name}</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleRemoveFile as React.MouseEventHandler<HTMLButtonElement>}
+                    type="button"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                  </div>
+                )}
+
+                <Textarea
+                  placeholder="Enter job description..."
+                  value={formData.jobDescription}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData(prev => ({ ...prev, jobDescription: e.target.value }))}
+                  className="min-h-[200px]"
+                  disabled={!!selectedFile}
+                />
+                </div>
             </div>
+          </div>
           </div>
 
           <DialogFooter>
