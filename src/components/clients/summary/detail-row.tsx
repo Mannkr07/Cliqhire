@@ -42,8 +42,8 @@ export function DetailRow({ label, value, onUpdate, optional, isDate }: DetailRo
   }
 
   return (
-    <div className="relative">
-      <div className="flex items-center py-2 border-b last:border-b-0">
+    <div className="relative border-b last:border-b-0">
+      <div className="flex items-center py-2 ">
         <span className="text-sm text-muted-foreground w-1/3">
           {label}
           {optional && <span className="text-xs ml-1">(optional)</span>}

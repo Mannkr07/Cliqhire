@@ -91,14 +91,45 @@ export default function JobsPage() {
           </div>
         </div>
 
-        {/* Loading Skeleton */}
-        <div className="p-4 space-y-4">
-          <div className="h-10 bg-gray-100 animate-pulse rounded-md w-1/4"></div>
-          <div className="space-y-2">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-gray-100 animate-pulse rounded-md"></div>
-            ))}
-          </div>
+        <div className="flex items-center justify-between p-4">
+          <Button size="sm" onClick={() => setOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Job Requirement
+          </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setFilterOpen(true)}
+              >
+                <SlidersHorizontal className="h-4 w-4 mr-2" />
+                Filters
+              </Button>
+              <Button variant="outline" size="sm">
+                <RefreshCcw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
+              <Button variant="ghost" size="sm">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </div>
+        </div>
+
+        <div className="flex-1">
+          <Table>
+            <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="text-xs uppercase text-muted-foreground font-medium">Position Name</TableHead>
+                  <TableHead className="text-xs uppercase text-muted-foreground font-medium">Job Department</TableHead>
+                  <TableHead className="text-xs uppercase text-muted-foreground font-medium">Job location</TableHead>
+                  <TableHead className="text-xs uppercase text-muted-foreground font-medium">Job Status</TableHead>
+                  <TableHead className="text-xs uppercase text-muted-foreground font-medium">Job Stage</TableHead>
+                  <TableHead className="text-xs uppercase text-muted-foreground font-medium">Minimum salary</TableHead>
+                  <TableHead className="text-xs uppercase text-muted-foreground font-medium">Maximum salary</TableHead>
+                  <TableHead className="text-xs uppercase text-muted-foreground font-medium">Job Owner</TableHead>
+                </TableRow>
+              </TableHeader>
+          </Table>
         </div>
       </div>
     );
@@ -132,7 +163,6 @@ export default function JobsPage() {
             <Plus className="h-4 w-4 mr-2" />
             Create Job Requirement
           </Button>
-          {jobs.length > 0 && (
             <div className="flex items-center gap-2">
               <Button 
                 variant="outline" 
@@ -150,7 +180,6 @@ export default function JobsPage() {
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </div>
-          )}
         </div>
 
         {/* Content */}
@@ -188,7 +217,7 @@ export default function JobsPage() {
                     </TableCell>
                     <TableCell className="text-sm">{job.minSalary}</TableCell>
                     <TableCell className="text-sm">{job.maxSalary}</TableCell>
-                    <TableCell className="text-sm">{job.client}</TableCell>
+                    <TableCell className="text-sm">{}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

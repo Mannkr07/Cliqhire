@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { Pencil, Plus } from "lucide-react"
 
 interface SummaryContentProps {
   jobId: string;
@@ -17,7 +17,7 @@ export function SummaryContent({ jobId }: SummaryContentProps) {
           <div className="bg-white rounded border p-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm text-muted-foreground">Job Description</h3>
-              <Button variant="ghost" size="sm" className="h-8 text-blue-500 hover:text-blue-600">
+              <Button variant="outline" size="sm" className="h-8 text-black">
                 <Plus className="h-4 w-4 mr-1" />
                 Add
               </Button>
@@ -34,20 +34,20 @@ export function SummaryContent({ jobId }: SummaryContentProps) {
         <div className="bg-gray-50 rounded-lg p-4">
           <h2 className="text-lg font-semibold mb-4">Job Details</h2>
           <div className="bg-white rounded border p-4 space-y-4">
-            <DetailRow label="Job Reference" value="L794V775" />
-            <DetailRow label="Position Name" value="SDE" />
+            <DetailRow label="Job Reference" addButton />
+            <DetailRow label="Position Name" addButton />
             <DetailRow label="Job Location" addButton />
             <DetailRow label="Remote" addButton />
             <DetailRow label="Office Address" addButton />
-            <DetailRow label="Headcount" value="1" />
+            <DetailRow label="Headcount" addButton />
             <DetailRow label="Experience Level" addButton />
             <DetailRow label="Expected Close Date" addButton />
             <DetailRow label="Minimum Salary" addButton />
             <DetailRow label="Maximum Salary" addButton />
-            <DetailRow label="Currency" value="USD" />
-            <DetailRow label="Frequency" value="Monthly" />
-            <DetailRow label="Contract Details" value="Full time" />
-            <DetailRow label="Open Date" value="2025-01-31" />
+            <DetailRow label="Currency" addButton />
+            <DetailRow label="Frequency" addButton />
+            <DetailRow label="Contract Details" addButton />
+            <DetailRow label="Open Date" addButton />
             <DetailRow label="Close Date" addButton />
             <DetailRow label="Job Industry" addButton />
           </div>
@@ -73,20 +73,32 @@ interface DetailRowProps {
 
 function DetailRow({ label, value, addButton }: DetailRowProps) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      {value ? (
-        <span className="text-sm">{value}</span>
-      ) : addButton ? (
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="h-8 text-blue-500 hover:text-blue-600"
-        >
-          <Plus className="h-3 w-3 mr-1" />
-          Add
-        </Button>
-      ) : null}
+    <div className="flex items-center py-2 border-b last:border-b-0">
+      <span className="text-sm text-muted-foreground w-1/3">{label}</span>
+      <div className="flex items-center justify-between flex-1">
+        <span className="text-sm text-muted-foreground">{value ? value : "No Details"}</span>
+        {value ? (
+          <span className="text-sm">{value}</span>
+        ) : addButton ? (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-8 text-black"
+          >
+            <Plus className="h-3 w-3 mr-1" />
+            Add
+          </Button>
+        ) : (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-8 text-black"
+          >
+            <Pencil className="h-3 w-3 mr-1" />
+            Edit
+          </Button>
+        )}
+      </div>
     </div>
   )
 }
