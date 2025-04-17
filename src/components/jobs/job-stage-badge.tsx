@@ -59,7 +59,10 @@ export function JobStageBadge({ stage, onStageChange }: JobStageBadgeProps) {
         {stages.map((stageOption) => (
           <DropdownMenuItem
             key={stageOption}
-            onClick={() => onStageChange(stageOption)}
+            onClick={(e: any) => {
+              e.stopPropagation()
+              onStageChange(stageOption)
+            }}
             className="flex items-center gap-2"
           >
             <Badge 
