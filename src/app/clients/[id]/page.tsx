@@ -172,7 +172,7 @@ export default function ClientPage({ params }: PageProps) {
       <div className="flex items-center justify-between p-4">
         <Button size="sm" onClick={() => setIsCreateJobOpen(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          Create Job
+          Create Job Requirment
         </Button>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => setIsFilterOpen(true)}>

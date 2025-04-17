@@ -40,7 +40,7 @@ interface CountrySuggestion {
   }
 }
 
-const recruitmentTypes = [
+const jobTypes = [
   "Full time",
   "Part time",
   "Project based",
@@ -90,12 +90,12 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
     jobTitle: "",
     client: "",
     relationshipManager: "",
-    recruitmentType: "",
+    jobTypes: "",
     stage: "New" as JobStage,
     deadline: null as Date | null,
     dateRange: {
-      start: null as Date | null,
-      end: null as Date | null
+      start: "" as any,
+      end: "" as any,
     },
     salaryRange: {
       min: "",
@@ -108,9 +108,9 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
     numberOfPositions: "",
     experience: "",
     reportingTo: "",
-    teamSize: "",
+    teamSize: 0 as any,
     link: "",
-    keySkills: "",
+    keySkills: "", 
     jobDescription: ""
   })
 
@@ -225,7 +225,7 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
         minimumSalary: parseInt(formData.salaryRange.min) || 0,
         maximumSalary: parseInt(formData.salaryRange.max) || 0,
         salaryCurrency: formData.salaryRange.currency,
-        jobType: formData.recruitmentType,
+        jobType: formData.jobTypes,
         experience: formData.experience,
         jobDescription: formData.jobDescription,
         nationalities: formData.nationalities,
@@ -233,6 +233,17 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
           min: parseInt(formData.salaryRange.min) || 0,
           max: parseInt(formData.salaryRange.max) || 0,
           currency: formData.salaryRange.currency
+        },
+        gender: formData.gender,
+        deadline: formData.deadline ? formData.deadline.toISOString() : "",
+        relationshipManager: formData.relationshipManager,
+        reportingTo: formData.reportingTo,
+        teamSize: formData.teamSize,
+        link: formData.link,
+        keySkills: formData.keySkills,
+        dateRange: {
+          start: formData.dateRange.start,
+          end: formData.dateRange.end
         }
       }
 
@@ -304,23 +315,23 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="recruitmentType">Recruitment Type</Label>
+              <Label htmlFor="jobTypes">Job Types</Label>
               <Select
-                value={formData.recruitmentType}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, recruitmentType: value }))}
+                value={formData.jobTypes}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, jobTypes: value }))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {recruitmentTypes.map(type => (
+                    {jobTypes.map((type: string) => (
                     <SelectItem key={type} value={type.toLowerCase()}>{type}</SelectItem>
-                  ))}
+                    ))}
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="grid gap-2">
+            {/* <div className="grid gap-2">
               <Label htmlFor="stage">Job Stage</Label>
               <Select
                 value={formData.stage}
@@ -335,7 +346,7 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
 
             <div className="grid gap-2">
               <Label>Deadline (by client)</Label>

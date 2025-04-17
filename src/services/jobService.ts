@@ -1,4 +1,6 @@
+import { Job } from "@/types/job";
 import axios from "axios";
+import exp from "constants";
 
 interface JobData {
   jobTitle: string;
@@ -15,11 +17,24 @@ interface JobData {
   salaryRange: {
     min: number;
     max: number;
+    currency: string;
+  };
+  nationalities: string[];
+  gender: string;
+  deadline: string;
+  relationshipManager: string;
+  reportingTo: string;
+  teamSize: number;
+  link: string;
+  keySkills: string;
+  jobDescription: string;
+  dateRange: {
+    start: string;
+    end: string;
   };
 }
 
-// Define an interface for the job response
-export interface JobResponse {
+export interface Jobs {
   _id: string;
   jobTitle: string;
   department: string;
@@ -33,18 +48,39 @@ export interface JobResponse {
   stage: string;
   minimumSalary: number;
   maximumSalary: number;
+  salaryCurrency: string;
   jobType: string;
   experience: string;
   salaryRange: {
     min: number;
     max: number;
+    currency: string;
+  };
+  nationalities: string[];
+  gender: string;
+  deadline: string;
+  relationshipManager: string;
+  reportingTo: string;
+  teamSize: number;
+  link: string;
+  keySkills: string;
+  jobDescription: string;
+  dateRange: {
+    start: string;
+    end: string;
   };
   createdAt: string;
 }
 
+export interface JobResponse {
+  jobs: Jobs[]
+}
+
+const API_URL = "https://aems-backend.onrender.com/api";
+
 const createJob = async (jobData: JobData) => {
   try {
-    const response = await axios.post("https://aems-backend.onrender.com/api/jobs", jobData);
+    const response = await axios.post(`${API_URL}/jobs`, jobData);
     return response.data;
   } catch (error: any) {
     if (error.response) {
@@ -56,9 +92,9 @@ const createJob = async (jobData: JobData) => {
   }
 };
 
-const getJobs = async (): Promise<JobResponse[]> => {
+const getJobs = async (): Promise<JobResponse> => {
   try {
-    const response = await axios.get("https://aems-backend.onrender.com/api/jobs");
+    const response = await axios.get(`${API_URL}/jobs`);
     return response.data;
   } catch (error: any) {
     if (error.response) {
@@ -70,9 +106,9 @@ const getJobs = async (): Promise<JobResponse[]> => {
   }
 };
 
-const getJobById = async (id: string): Promise<JobResponse> => {
+const getJobById = async (id: string): Promise<Jobs> => {
   try {
-    const response = await axios.get(`https://aems-backend.onrender.com/api/jobs/${id}`);
+    const response = await axios.get(`${API_URL}/jobs/${id}`);
     return response.data;
   } catch (error: any) {
     if (error.response) {
@@ -86,7 +122,7 @@ const getJobById = async (id: string): Promise<JobResponse> => {
 
 const updateJobById = async (id: string, jobData: JobData) => {
   try {
-    const response = await axios.patch(`https://aems-backend.onrender.com/api/jobs/${id}`, jobData);
+    const response = await axios.patch(`${API_URL}/jobs/${id}`, jobData);
     return response.data;
   } catch (error: any) {
     if (error.response) {
@@ -100,7 +136,7 @@ const updateJobById = async (id: string, jobData: JobData) => {
 
 const deleteJobById = async (id: string) => {
   try {
-    const response = await axios.delete(`https://aems-backend.onrender.com/api/jobs/${id}`);
+    const response = await axios.delete(`${API_URL}/jobs/${id}`);
     return response.data;
   } catch (error: any) {
     if (error.response) {

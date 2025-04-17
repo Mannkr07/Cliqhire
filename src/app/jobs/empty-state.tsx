@@ -32,7 +32,7 @@ export function JobsEmptyState() {
               </svg>
             </div>
           </div>
-        </div>
+          </div>
         <h2 className="text-xl font-semibold mb-3">You have not created any jobs yet</h2>
         <p className="text-gray-500 mb-6">
           A Job represents a new job opening, an open position or vacancy listing. Creating a job will allow you to start adding candidates to that job, publish the job onto your career page, post the job to job boards and much more.

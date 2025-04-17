@@ -9,12 +9,54 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useRouter } from "next/navigation"
 import { JobStageBadge } from "@/components/jobs/job-stage-badge"
 import { Job, JobStage } from "@/types/job"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+
+function ConfirmStageChangeDialog({
+  open,
+  onOpenChange,
+  onConfirm,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onConfirm: () => void
+}) {
+  return (
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Confirm Stage Change</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to update the job stage? This action will be saved immediately.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm}>Confirm</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
 
 export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingStageChange, setPendingStageChange] = useState<{
+    jobId: string;
+    newStage: JobStage;
+  } | null>(null);
 
   const router = useRouter();
 
@@ -42,7 +84,16 @@ export default function JobsPage() {
     loadJobs();
   }, []);
 
-  const handleStageChange = async (jobId: string, newStage: JobStage) => {
+  const handleStageChange = (jobId: string, newStage: JobStage) => {
+    setPendingStageChange({ jobId, newStage });
+    setConfirmOpen(true);
+  };
+
+  const confirmStageChange = async () => {
+    if (!pendingStageChange) return;
+    
+    const { jobId, newStage } = pendingStageChange;
+    
     try {
       // Update local state immediately for better UX
       setJobs(prev => prev.map(job => 
@@ -59,13 +110,15 @@ export default function JobsPage() {
       if (!response.ok) {
         throw new Error('Failed to update job stage');
       }
-
     } catch (error) {
       console.error('Error updating job stage:', error);
       // Revert the local state if the API call fails
       setJobs(prev => prev.map(job => 
         job.id === jobId ? { ...job, stage: job.stage } : job
       ));
+    } finally {
+      setPendingStageChange(null);
+      setConfirmOpen(false);
     }
   };
 
@@ -229,9 +282,16 @@ export default function JobsPage() {
           </div>
         )}
       </div>
+      
       <CreateJobModal 
         open={open} 
         onOpenChange={setOpen}
+      />
+      
+      <ConfirmStageChangeDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        onConfirm={confirmStageChange}
       />
     </>
   )

@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -67,6 +65,11 @@ export function AddNoteDialog({ open, onOpenChange, onSubmit }: AddNoteDialogPro
                 <path d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1"/>
               </svg>
             </button>
+            <button className="p-2 hover:bg-blue-700 rounded" onClick={() => onOpenChange(false)}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -77,7 +80,7 @@ export function AddNoteDialog({ open, onOpenChange, onSubmit }: AddNoteDialogPro
               <div className="bg-blue-100 text-blue-600 rounded-full w-8 h-8 flex items-center justify-center">
                 A
               </div>
-              <span className="text-blue-600">AEMS</span>
+              <span className="text-blue-600">Anzney</span>
             </div>
           </div>
 
